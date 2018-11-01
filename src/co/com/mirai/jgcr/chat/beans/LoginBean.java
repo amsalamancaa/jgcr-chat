@@ -1,0 +1,53 @@
+package co.com.mirai.jgcr.chat.beans;
+
+import java.io.Serializable;
+
+import javax.faces.application.FacesMessage;
+import javax.faces.bean.ManagedBean;
+import javax.faces.context.FacesContext;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+
+import co.com.mirai.jgcr.chat.entities.Usuario;
+
+@ManagedBean
+public class LoginBean implements Serializable {
+	private static final long serialVersionUID = 1L;
+	private long uname;
+	private String password;
+	private Usuario usuario;
+
+	public LoginBean() {
+		this.usuario = new Usuario();
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public long getUname() {
+		return uname;
+	}
+
+	public void setUname(long uname) {
+		this.uname = uname;
+	}
+	
+	public void logOut() {
+		this.usuario = new Usuario();
+	}
+
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
+
+}

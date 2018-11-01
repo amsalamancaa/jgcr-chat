@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title>Ingresar al sistema</title>
+	<script src="https://apis.google.com/js/platform.js" async defer></script>
+	<meta name="google-signin-client_id"
+		content="568263429481-d4k9d8t60iv5jemgv8k5b1hp5a66gjui.apps.googleusercontent.com">
+</h:head>
+<h:body>
+	<h:form id="loginForm">
+		<p:growl id="msg" showDetail="true" life="3000" />
+		<p:panel header="Login" style="width: 360px;">
+			<h:panelGrid id="loginPanel" columns="2">
+				<h:outputText value="Username" />
+				<p:inputText id="username" value="#{loginBean.uname}"></p:inputText>
+				<p:spacer></p:spacer>
+				<p:message for="username"></p:message>
+				<h:outputText value="Password" />
+				<p:password id="password" value="#{loginBean.password}"
+					feedback="false"></p:password>
+				<p:spacer></p:spacer>
+				<p:message for="password"></p:message>
+				<p:spacer></p:spacer>
+				<p:commandButton action="#{loginBean.loginProject}" value="Login"
+					update="loginForm" ajax="false"></p:commandButton>
+			</h:panelGrid>
+		</p:panel>
+		<div class="g-signin2" data-onsuccess="onSignIn" id="myP"></div>
+		<img id="myImg">
+		<br>
+		<p id="name"></p>
+		<div id="status"></div>
+		<script type="text/javascript">
+			function onSignIn(googleUser) {
+				// window.location.href='success.jsp';
+				var profile = googleUser.getBasicProfile();
+				var imagurl = profile.getImageUrl();
+				var name = profile.getName();
+				var email = profile.getEmail();
+				document.getElementById("myImg").src = imagurl;
+				document.getElementById("name").innerHTML = name;
+				document.getElementById("myP").style.visibility = "hidden";
+				document.getElementById("status").innerHTML = 'Welcome ' + name
+						+ '!<a href=success.jsp?email=' + email + '&name='
+						+ name + '/>Continue with Google login</a></p>'
+			}
+		</script>
+		<button onclick="myFunction()">Sign Out</button>
+		<script>
+			function myFunction() {
+				gapi.auth2.getAuthInstance().disconnect();
+				location.reload();
+			}
+		</script>
+	</h:form>
+</h:body>
+</html>

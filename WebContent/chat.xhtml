@@ -1,0 +1,73 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title>Chat</title>
+</h:head>
+<h:body>
+	<p:megaMenu style="margin-top:20px">
+		<p:submenu label="Chats">
+			<p:column>
+				<p:submenu label="Chats">
+					<p:menuitem value="Home" url="home.xhtml" />
+					<p:menuitem value="Mensajes predeterminados"
+						url="mensajes_usuario.xhtml" />
+					<p:menuitem value="Crear" url="crearChat.xhtml" />
+				</p:submenu>
+			</p:column>
+		</p:submenu>
+
+		<p:menuitem actionListener="#{loginBean.logOut}" value="Salir"
+			url="logout.jsp" icon="ui-icon-close" />
+	</p:megaMenu>
+
+	<f:metadata>
+		<f:viewParam name="chatId" value="#{chatBean.chatId}" />
+	</f:metadata>
+	<h:form id="mensajes">
+		<p:growl id="messages" showDetail="true" />
+		<p:poll interval="3" listener="#{chatBean.refreshMensajes}"
+			update="mensajes" />
+
+		<h:panelGrid id="panel" columns="3" cellpadding="5">
+			<p:dataList style="min-width:800px; max-heigth:800px;"
+				value="#{chatBean.mensajes}" var="mensaje" type="definition"
+				id="listado_mensajes" paginator="true" rows="20" styleClass="paginated">
+				<f:facet name="header">
+	        			Mensajes
+	       		</f:facet>
+	       		#{mensaje.usuario.nombre}: #{mensaje.mensaje}
+       		</p:dataList>
+			<h:panelGrid style="min-width:300px;" columns="1"
+				columnClasses="label, value">
+				<p:dataTable id="mensajes" var="mensaje"
+					value="#{mensajesUsuarioBean.mensajesUsuario}" rows="5"
+					paginator="true"
+					paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					rowsPerPageTemplate="5,10,15">
+
+					<p:column headerText="Mensajes">
+						<li>"#{mensaje.mensaje}" <p:commandButton value="Enviar"
+								update="mensajes"
+								actionListener="#{chatBean.enviarMensajePredeterminado}"
+								styleClass="ui-priority-primary">
+								<f:param name="id" value="#{mensaje.id}" />
+							</p:commandButton>
+						</li>
+					</p:column>
+				</p:dataTable>
+				<h:panelGrid columns="1">
+					<p:inputText value="#{chatBean.mensaje}" size="40" />
+					<p:commandButton value="Enviar" id="enviar" update="mensajes"
+						actionListener="#{chatBean.enviarMensaje}" />
+				</h:panelGrid>
+				<p:fileUpload fileUploadListener="#{chatBean.handleFileUpload}"
+					mode="advanced" auto="true" sizeLimit="10000000" />
+
+			</h:panelGrid>
+		</h:panelGrid>
+	</h:form>
+</h:body>
+</html>

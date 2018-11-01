@@ -1,0 +1,113 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title>Bienvenido</title>
+</h:head>
+<h:body>
+
+	<f:metadata>
+		<f:viewParam name="email" value="#{listaChatsBean.email}" />
+		<f:viewParam name="image" value="#{listaChatsBean.image}" />
+		<f:viewParam name="nombre" value="#{listaChatsBean.nombre}" />
+	</f:metadata>
+
+	<p:megaMenu style="margin-top:20px">
+		<p:submenu label="Chats">
+			<p:column>
+				<p:submenu label="Chats">
+					<p:menuitem value="Home" url="home.xhtml" />
+					<p:menuitem value="Mensajes predeterminados" url="mensajes_usuario.xhtml" />
+					<p:menuitem value="Crear" url="crearChat.xhtml" />
+				</p:submenu>
+			</p:column>
+		</p:submenu>
+
+		<p:menuitem actionListener="#{loginBean.logOut()}" value="Salir"
+			url="logout.jsp" icon="ui-icon-close" />
+	</p:megaMenu>
+	<p:panel id="user" header="#{loginBean.usuario.nombre}">
+		<h:panelGrid columns="2" cellpadding="10">
+			<h:outputText value="#{loginBean.usuario.correos}" />
+			<img src="#{loginBean.usuario.image}" />
+		</h:panelGrid>
+	</p:panel>
+	<h:form>
+		<p:poll interval="1" listener="#{listaChatsBean.obtenerChats}"
+			update="panel,user" />
+	</h:form>
+	<h:panelGrid id="panel" columns="2" cellpadding="5">
+		<p:panel header="Administrador" style="margin-bottom:20px">
+			<p:dataTable id="chats" var="chat" value="#{listaChatsBean.chats}"
+				rows="10" paginator="true"
+				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="5,10,15">
+
+				<p:column headerText="Fecha">
+					<h:outputText value="Inicio: #{chat.inicio} - Fin #{chat.fin}" />
+				</p:column>
+				
+				<p:column headerText="Asunto">
+					<h:outputText value="#{chat.materia} - #{chat.tema} - #{chat.nombreChat}" />
+				</p:column>
+
+				<p:column headerText="Ingresar">
+					<p:link outcome="chat" disabled="#{chat.acceso}" value="Ingresar">
+						<f:param name="chatId" value="#{chat.id}" />
+					</p:link>
+				</p:column>
+			</p:dataTable>
+		</p:panel>
+		<p:panel header="Invitado" style="margin-bottom:20px">
+			<p:dataTable id="chatsInvitado" var="chat"
+				value="#{listaChatsBean.chatsInvitados}" rows="10" paginator="true"
+				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="5,10,15">
+
+				<p:column headerText="Fecha">
+					<h:outputText value="Inicio: #{chat.inicio} - Fin #{chat.fin}" />
+				</p:column>
+				
+				<p:column headerText="Asunto">
+					<h:outputText value="#{chat.materia} - #{chat.tema} - #{chat.nombreChat}" />
+				</p:column>
+
+				<p:column headerText="Administrador">
+					<h:outputText value="#{chat.administrador.nombre}" />
+				</p:column>
+				
+				<p:column headerText="Ingresar">
+					<p:link outcome="chat" disabled="#{chat.acceso}" value="Ingresar">
+						<f:param name="chatId" value="#{chat.id}" />
+					</p:link>
+				</p:column>
+			</p:dataTable>
+		</p:panel>
+		<p:panel header="Pasados" style="margin-bottom:20px">
+			<p:dataTable id="chatsPasados" var="chat"
+				value="#{listaChatsBean.chatsSacarInfo}" rows="10" paginator="true"
+				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="5,10,15">
+
+				<p:column headerText="Fecha">
+					<h:outputText value="Inicio: #{chat.inicio} - Fin #{chat.fin}" />
+				</p:column>
+				
+				<p:column headerText="Asunto">
+					<h:outputText value="#{chat.materia} - #{chat.tema} - #{chat.nombreChat}" />
+				</p:column>
+
+				<p:column headerText="Ingresar">
+					<p:link outcome="chat" value="Ingresar">
+						<f:param name="chatId" value="#{chat.id}" />
+					</p:link>
+				</p:column>
+			</p:dataTable>
+		</p:panel>
+	</h:panelGrid>
+
+</h:body>
+</html>

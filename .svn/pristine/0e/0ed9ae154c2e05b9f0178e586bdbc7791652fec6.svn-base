@@ -1,0 +1,110 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title>Bienvenido</title>
+</h:head>
+<h:body>
+	<p:megaMenu style="margin-top:20px">
+		<p:submenu label="Chats">
+			<p:column>
+				<p:submenu label="Chats">
+					<p:menuitem value="Home" url="home.xhtml" />
+					<p:menuitem value="Mensajes predeterminados"
+						url="mensajes_usuario.xhtml" />
+					<p:menuitem value="Crear" url="crearChat.xhtml" />
+				</p:submenu>
+			</p:column>
+		</p:submenu>
+
+		<p:menuitem actionListener="#{loginBean.logOut}" value="Salir"
+			url="logout.jsp" icon="ui-icon-close" />
+	</p:megaMenu>
+
+	<f:metadata>
+		<f:viewParam name="chatId" value="#{chatBean.chatId}" />
+	</f:metadata>
+	<h:form>
+		<h:panelGrid columns="1">
+
+			<p:panel header="Crear nuevo chat académico">
+				<h:panelGrid columns="3">
+					<h:panelGrid columns="2" columnClasses="label, value">
+						<h:outputLabel value="Fecha de inicio: *" />
+						<p:calendar required="true" id="datetimeinicio"
+							value="#{crearChatBean.chat.inicio}" pattern="MM/dd/yyyy HH:mm" />
+						<h:outputLabel value="Fecha de fin: *" />
+						<p:calendar required="true" id="datetimefin"
+							value="#{crearChatBean.chat.fin}" pattern="MM/dd/yyyy HH:mm" />
+						<h:outputLabel value="Materia *" />
+						<p:inputText required="true" value="#{crearChatBean.chat.materia}" />
+						<h:outputLabel value="Tema: *" />
+						<p:inputText required="true" value="#{crearChatBean.chat.tema}" />
+						<h:outputLabel value="Nombre chat: *" />
+						<p:inputText required="true"
+							value="#{crearChatBean.chat.nombreChat}" />
+					</h:panelGrid>
+
+					<p:panel header="Invitados">
+						<h:panelGrid columns="1">
+							<h:panelGrid columns="2" columnClasses="label, value">
+								<h:form>
+									<p:inputText id="correo_invitado"
+										value="#{crearChatBean.invitado}" />
+									<p:commandButton value="Agregar invitado"
+										update="invitados_table,correo_invitado"
+										actionListener="#{crearChatBean.agregarInvitado}"
+										styleClass="ui-priority-primary" />
+
+									<p:dataTable id="invitados_table" var="invitado"
+										value="#{crearChatBean.chat.usuarios}">
+										<p:column headerText="Nombre">
+											<h:outputText value="#{invitado.nombre}" />
+										</p:column>
+										<p:column headerText="Correo">
+											<h:outputText value="#{invitado.correos}" />
+										</p:column>
+									</p:dataTable>
+								</h:form>
+							</h:panelGrid>
+						</h:panelGrid>
+					</p:panel>
+
+					<p:panel header="Momentos del chat">
+						<h:panelGrid columns="1">
+							<h:panelGrid columns="2" columnClasses="label, value">
+								<h:form>
+									<h:outputLabel value="Nombre del momento: *" />
+									<p:inputText value="#{crearChatBean.momento.nombre}" />
+									<h:outputLabel value="Fecha de inicio del momento: *" />
+									<p:calendar required="true" id="momentodatetime"
+										value="#{crearChatBean.momento.inicio}"
+										pattern="MM/dd/yyyy HH:mm" />
+									<p:commandButton value="Agregar momento" update="momentos"
+										actionListener="#{crearChatBean.agregarMomento}"
+										styleClass="ui-priority-primary" />
+									<p:dataList id="momentos"
+										value="#{crearChatBean.chat.momentos}" var="momento"
+										type="ordered">
+										<f:facet name="header">
+            									Momentos
+        									</f:facet>
+        									#{momento.nombre}, #{momento.inicio}
+    									</p:dataList>
+								</h:form>
+							</h:panelGrid>
+
+						</h:panelGrid>
+					</p:panel>
+
+				</h:panelGrid>
+			</p:panel>
+			<p:commandButton value="Crear chat" id="nonAjax"
+				actionListener="#{crearChatBean.guardar}" ajax="false" />
+		</h:panelGrid>
+	</h:form>
+
+</h:body>
+</html>

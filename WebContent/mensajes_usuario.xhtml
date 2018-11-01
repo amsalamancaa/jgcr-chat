@@ -1,0 +1,68 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title>Mensajes predeterminados</title>
+</h:head>
+<h:body>
+
+	<p:megaMenu style="margin-top:20px">
+		<p:submenu label="Chats">
+			<p:column>
+				<p:submenu label="Chats">
+					<p:menuitem value="Home" url="home.xhtml" />
+					<p:menuitem value="Mensajes predeterminados"
+						url="mensajes_usuario.xhtml" />
+					<p:menuitem value="Crear" url="crearChat.xhtml" />
+				</p:submenu>
+			</p:column>
+		</p:submenu>
+
+		<p:menuitem actionListener="#{loginBean.logOut()}" value="Salir"
+			url="logout.jsp" icon="ui-icon-close" />
+	</p:megaMenu>
+	<p:panel id="user" header="#{loginBean.usuario.nombre}">
+		<h:panelGrid columns="2" cellpadding="10">
+			<h:outputText value="#{loginBean.usuario.correos}" />
+			<img src="#{loginBean.usuario.image}" />
+		</h:panelGrid>
+	</p:panel>
+	<h:panelGrid id="panel" columns="2" cellpadding="5">
+		<p:panel>
+			<h:form>
+				<h:panelGrid columns="1" cellpadding="5">
+					<h:outputLabel value="Mensaje: *" />
+					<p:inputText value="#{mensajesUsuarioBean.mensaje}" />
+					<p:commandButton value="Agregar mensaje" update="panel,mensajes"
+						ajax="false"
+						actionListener="#{mensajesUsuarioBean.agregarMensaje}"
+						styleClass="ui-priority-primary" />
+				</h:panelGrid>
+			</h:form>
+		</p:panel>
+		<p:dataTable id="mensajes" var="mensaje"
+			value="#{mensajesUsuarioBean.mensajesUsuario}" rows="10"
+			paginator="true"
+			paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+			rowsPerPageTemplate="5,10,15">
+
+			<p:column headerText="Mensaje">
+				<h:outputText value="#{mensaje.mensaje}" />
+			</p:column>
+
+			<p:column headerText="Borrar">
+				<h:form>
+					<p:commandButton value="Borrar" update="panel,mensajes"
+						ajax="false" actionListener="#{mensajesUsuarioBean.borrarMensaje}"
+						styleClass="ui-priority-primary">
+						<f:param name="id" value="#{mensaje.id}" />
+					</p:commandButton>
+				</h:form>
+			</p:column>
+		</p:dataTable>
+	</h:panelGrid>
+</h:body>
+</html>
